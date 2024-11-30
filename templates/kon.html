@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+    <title>ランダム献立生成アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='kondate.css') }}">
+</head>
+
+<body background="background-image: url('{{url_for('static',filename='images/lunch39.png')}}'); background-size: cover;">
+    <div class="anim-box popup is-animated">
+        <h1>今日の献立</h1>
+    </div>
+
+    <div class="container">
+        <!-- 予算入力フォーム -->
+        <form action="/set_budget" method="post">
+            <label for="budget">予算を入力してください (円):</label>
+            <input type="number" id="budget" name="budget" required>
+            <label for="meal_time">食事の時間を選択してください:</label>
+            <select id="meal_time" name="meal_time" required>
+                <option value="">-- 選択してください --</option>
+                <option value="朝食">朝</option>
+                <option value="昼食">昼</option>
+                <option value="晩飯">夕</option>
+            </select>
+            <button type="submit">ごはんを決定</button>
+        </form>
+
+        {% if menu %}
+        <ul>
+            <!-- メニュー項目の表示 -->
+            {% for category, (item, price, calorie) in menu.items() %}
+            <li>{{ category }} : {{ item }} - ¥{{ price }}  {{ calorie }}kcal</li>
+            {% endfor %}
+        </ul>
+        <p>合計金額 : ¥{{ total }}    おつり : ¥{{ otsuri }}</p>
+        <p>カロリー : {{ total_cal }}kcal</p>  
+        {% endif %}
+
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <script src="kondate.js"></script>
+</body>
+
+</html>
